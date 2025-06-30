@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: Face Recognition API
+  description: |
+    Face Recognition API using DeepFace with ArcFace model for accurate face identification.
+
+
+servers:
+  - url: http://localhost:8001
+
+
+paths:
+  /api/recognize:
+    post:
+      summary: Recognize faces in uploaded image
+      description: |
+        Upload an image file and get face recognition results with similarity scores.
+        The API will extract face embeddings and compare them against the database.
+      operationId: recognizeFace
+      tags:
+        - Face Recognition
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Image file containing faces (JPG, PNG, BMP)
+                  example: face_image.jpg
+                top_k:
+                  type: integer
+                  minimum: 1
+                  maximum: 50
+                  default: 5
+                  description: Number of top matches to return
+                  example: 5
+                threshold:
+                  type: number
+                  format: float
+                  minimum: 0.0
+                  maximum: 1.0
+                  default: 0.6
+                  description: Minimum similarity threshold for matches
+                  example: 0.6
+            encoding:
+              file:
+                contentType: image/jpeg, image/png, image/bmp
+      responses:
+        '200':
+          description: Face recognition completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecognitionResponse'
+              examples:
+                successful_match:
+                  summary: Successful face match
+                  value:
+                    result:
+                      - person_id: "1001"
+                        similarity: 0.8542
+                        confidence: "HIGH"
+                        image_path: "/dataset/person_1001_01.jpg"
+                      - person_id: "1002"
+                        similarity: 0.7321
+                        confidence: "HIGH"
+                        image_path: "/dataset/person_1002_03.jpg"
+                    query_info:
+                      filename: "query_face.jpg"
+                      total_matches: 2
+                no_matches:
+                  summary: No confident matches found
+                  value:
+                    result: []
+                    query_info:
+                      filename: "unknown_face.jpg"
+                      total_matches: 0
+        '400':
+          description: Bad request - Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_image:
+                  summary: Invalid image file
+                  value:
+                    detail: "Invalid image file"
+                invalid_format:
+                  summary: Unsupported file format
+                  value:
+                    detail: "File format not supported. Please use JPG, PNG, or BMP"
+                file_too_large:
+                  summary: File size too large
+                  value:
+                    detail: "File size exceeds 10MB limit"
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                processing_error:
+                  summary: Face recognition processing error
+                  value:
+                    detail: "Failed to extract face embedding"
+                database_error:
+                  summary: Database connection error
+                  value:
+                    detail: "Unable to load face database"
+

@@ -1,0 +1,61 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+venv/
+
+.venv/
+env/
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Model & training outputs
+*.ckpt
+*.pt
+*.h5
+*.pkl
+*.onnx
+runs/
+logs/
+tensorboard_logs/
+output/
+results/
+checkpoints/
+
+# Hugging Face cache
+~/.cache/huggingface/
+*.jsonl
+*.lock
+
+
+data/dataset/
+
+# FastAPI auto-generated
+*.log
+*.db
+*.sqlite3
+
+# Tests
+coverage/
+.pytest_cache/
+htmlcov/
+
+# Packaging
+*.egg-info/
+build/
+dist/
+
+# Other
+*.zip
+*.tar.gz
+*.bak
+
