@@ -1,0 +1,6 @@
+For Deliverable
+- A Research is in folder docs
+- A diagram of face recognition pipeline is in docs
+- A schema design of API service is in folder api
+- A code of API service and unit test is in folder api
+  
