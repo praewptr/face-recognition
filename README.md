@@ -7,3 +7,4 @@ For Deliverable
   
 Info
 - build_database.py is for build a database from embedding a raw dataset
+- face_recognition.py is for recognize a face compared with embedding face in database
